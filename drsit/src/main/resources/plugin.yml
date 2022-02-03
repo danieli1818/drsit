@@ -1,0 +1,18 @@
+name: DRSit
+version: 0.0.1
+main: drsit.DRSit
+authors: [DanielRottner]
+description: DRSit minecraft plugin for enabling players to sit on blocks.
+api-version: 1.12
+
+commands:
+    drsit:
+        description: drsit commands.
+        permission: drsit.reload
+        permission-message: You do not have permission to run this command!
+        usage: /<command>
+    sit:
+        description: sit command to sit.
+        permission: drsit.sit.command
+        permission-message: You do not have permission to run this command!
+        usage: /<command>

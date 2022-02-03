@@ -1,0 +1,41 @@
+
+
+
+messages_prefix: "&1"
+error_messages_prefix: "&4"
+
+actions:
+    - RIGHT_CLICK_BLOCK
+
+whitelist:
+    - STAIRS
+
+blacklist:
+    - ACACIA_DOOR
+
+macro:
+    - WOODEN_STAIRS:
+        - ACACIA_STAIRS
+        - WOOD_STAIRS
+        - SPRUCE_WOOD_STAIRS
+        - BIRCH_WOOD_STAIRS
+        - JUNGLE_WOOD_STAIRS
+        - DARK_OAK_STAIRS
+    - STONE_STAIRS:
+        - COBBLESTONE_STAIRS
+        - BRICK_STAIRS
+        - PURPUR_STAIRS
+        - QUARTZ_STAIRS
+        - SANDSTONE_STAIRS
+        - RED_SANDSTONE_STAIRS
+        - SMOOTH_STAIRS
+    - STAIRS:
+        - WOODEN_STAIRS
+        - STONE_STAIRS
+
+offsets:
+    WOODEN_STAIRS: 0,-1,0
+    STONE_STAIRS|2: 0,-1,0
+
+
+
