@@ -15,7 +15,8 @@ import org.bukkit.entity.Player;
 import drsit.common.BlockData;
 import drsit.common.BlockDataSets;
 import drsit.management.SittingManager;
-import drsit.utils.MessagesSender;
+import drsit.utils.messages.MessagesSender;
+import drsit.utils.messages.MessagesStorage;
 import drsit.utils.reloader.Reloadable;
 
 public class SitCommand implements CommandExecutor, Reloadable {
@@ -38,21 +39,17 @@ public class SitCommand implements CommandExecutor, Reloadable {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) {
-			MessagesSender.getInstance().sendErrorMessage("Only players can use this command!", sender);
+			MessagesSender.getInstance().sendErrorMessage(MessagesStorage.getInstance().getMessage("only_players_command_message"), sender);
 			return false;
 		}
 		Player player = (Player)sender;
-		if (!player.hasPermission("drsit.sit.command")) {
-			MessagesSender.getInstance().sendErrorMessage("You don't have permission to run this command!", sender);
-			return false;
-		}
 		Block block = getBlockUnderAPlayer(player);
 		if (block.getType() == Material.AIR && !player.hasPermission("drsit.sit.air")) {
-			MessagesSender.getInstance().sendErrorMessage("You can't sit on air!", sender);
+			MessagesSender.getInstance().sendErrorMessage(MessagesStorage.getInstance().getMessage("sitting_on_air_message"), sender);
 			return false;
 		}
 		if (!player.hasPermission("drsit.sit.bypass") && getBlacklist().contains(new BlockData(block))) {
-			MessagesSender.getInstance().sendErrorMessage("You can't sit on that block!", sender);
+			MessagesSender.getInstance().sendErrorMessage(MessagesStorage.getInstance().getMessage("cant_sit_on_block_message"), sender);
 			return false;
 		}
 		SittingManager.getInstance().makePlayerSit(player, block);

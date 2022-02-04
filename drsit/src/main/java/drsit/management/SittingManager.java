@@ -1,7 +1,9 @@
 package drsit.management;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,11 +22,13 @@ import org.bukkit.util.Vector;
 
 import drsit.management.offset.BlocksOffsetManager;
 import drsit.utils.MacroUtils;
-import drsit.utils.MessagesSender;
 import drsit.utils.SchedulerUtils;
 import drsit.utils.files.FileConfigurationsManager;
+import drsit.utils.messages.MessagesSender;
+import drsit.utils.messages.MessagesStorage;
+import drsit.utils.reloader.Reloadable;
 
-public class SittingManager {
+public class SittingManager implements Reloadable {
 	
 	private static final String configFilename = "config.yml";
 
@@ -55,19 +59,12 @@ public class SittingManager {
 		return instance;
 	}
 	
-	public void reloadConfigs() {
-		MacroUtils.reloadInstance(configFilename);
-		FileConfiguration conf = FileConfigurationsManager.getInstance().reloadFile(configFilename);
-		this.blocksOffsetManager.setMacro(MacroUtils.getInstance(configFilename));
-		this.blocksOffsetManager.reloadBlocksOffsets(getOffsetsMap(conf));
-	}
-	
 	public boolean makePlayerSit(Player player, Location location) {
 		if (location.getBlock() == null) {
 			return false;
 		}
 		if (isPlayerSitting(player.getUniqueId())) {
-			MessagesSender.getInstance().sendErrorMessage("You are already sitting!", player);
+			MessagesSender.getInstance().sendErrorMessage(MessagesStorage.getInstance().getMessage("already_sitting_message"), player);
 			return false;
 		}
 		setPrevSittingLocation(player.getUniqueId(), player.getLocation());
@@ -244,7 +241,8 @@ public class SittingManager {
 	}
 	
 	public void makeAllSittingPlayersDismount() {
-		for (UUID uuid : this.sittingPlayersPreviousLocations.keySet()) {
+		Set<UUID> uuids = new HashSet<>(this.sittingPlayersPreviousLocations.keySet());
+		for (UUID uuid : uuids) {
 			makeSittingPlayerDismount(uuid);
 		}
 	}
@@ -330,6 +328,22 @@ public class SittingManager {
 			this.sittingBlock = sittingBlock;
 		}
 		
+	}
+
+	@Override
+	public void reload() {
+		MacroUtils.reloadInstance(configFilename);
+		FileConfiguration conf = FileConfigurationsManager.getInstance().getFileConfiguration(configFilename);
+		this.blocksOffsetManager.setMacro(MacroUtils.getInstance(configFilename));
+		this.blocksOffsetManager.reloadBlocksOffsets(getOffsetsMap(conf));
+		
+	}
+
+	@Override
+	public Collection<String> getReloadFilenames() {
+		Set<String> filenames = new HashSet<>();
+		filenames.add(configFilename);
+		return filenames;
 	}
 	
 }

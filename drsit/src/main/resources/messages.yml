@@ -1,0 +1,11 @@
+
+
+# Normal messages
+reload_message: "Reloaded configs successfully!"
+
+# Error messages
+reload_command_doesnt_exist_message: "Command doesn't exist! Did you mean /drsit reload?"
+only_players_command_message: "Only players can use this command!"
+sitting_on_air_message: "You can't sit on air!"
+cant_sit_on_block_message: "You can't sit on that block!"
+already_sitting_message: "You are already sitting!"

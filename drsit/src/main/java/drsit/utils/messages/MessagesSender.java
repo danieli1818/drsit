@@ -1,4 +1,4 @@
-package drsit.utils;
+package drsit.utils.messages;
 
 import org.bukkit.command.CommandSender;
 
@@ -41,20 +41,39 @@ public class MessagesSender {
 	}
 	
 	public void sendMessage(String message, CommandSender sender) {
-		sendMessageWithoutPrefixes(this.prefix + message, sender);
+		if (!isMessageNullOrBlank(message)) {
+			sendMessageWithoutPrefixes(this.prefix + message, sender);
+		}
 	}
 	
 	private void sendMessageWithoutPrefixes(String message, CommandSender sender) {
-		sender.spigot().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
+		if (!isMessageNullOrBlank(message)) {
+			sender.spigot().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
+		}
+	}
+	
+	private boolean isMessageNullOrBlank(String message) {
+		return message == null || message.equals("");
 	}
 	
 	public void sendMessage(String[] messages, CommandSender sender) {
-		sender.sendMessage(this.prefix);
-		TextComponent[] messagesTextComponents = new TextComponent[messages.length];
-		for (int i = 0; i < messages.length; i++) {
-			messagesTextComponents[i] = new TextComponent(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', messages[i])));
+		if (!areMessagesNullOrBlank(messages)) {
+			sender.sendMessage(this.prefix);
+			TextComponent[] messagesTextComponents = new TextComponent[messages.length];
+			for (int i = 0; i < messages.length; i++) {
+				messagesTextComponents[i] = new TextComponent(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', messages[i])));
+			}
+			sender.spigot().sendMessage(messagesTextComponents);
 		}
-		sender.spigot().sendMessage(messagesTextComponents);
+	}
+	
+	private boolean areMessagesNullOrBlank(String[] messages) {
+		for (String message : messages) {
+			if (!isMessageNullOrBlank(message)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public void sendMessage(BaseComponent message, CommandSender sender) {
@@ -65,11 +84,9 @@ public class MessagesSender {
 	}
 	
 	public void sendErrorMessage(String message, CommandSender sender) {
-		sendMessageWithoutPrefixes(this.errorPrefix + message, sender);
-	}
-	
-	public void sendDontHavePermissionErrorMessage(String permission, CommandSender sender) {
-		sendMessage(this.errorPrefix + "You don't have the permission to run this command! (" + permission + ")", sender);
+		if (!isMessageNullOrBlank(message)) {
+			sendMessageWithoutPrefixes(this.errorPrefix + message, sender);
+		}
 	}
 	
 }
